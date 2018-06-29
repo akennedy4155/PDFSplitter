@@ -1,0 +1,9 @@
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\bin\Debug\netstandard2.0\SplitterLibrary.deps.json
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\bin\Debug\netstandard2.0\SplitterLibrary.dll
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\bin\Debug\netstandard2.0\SplitterLibrary.pdb
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.csprojAssemblyReference.cache
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.csproj.CoreCompileInputs.cache
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.AssemblyInfoInputs.cache
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.AssemblyInfo.cs
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.dll
+c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.pdb
