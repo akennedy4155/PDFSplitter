@@ -1,20 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
 
 namespace SplitterLibrary
 {
     public class PDFModel
     {
-        public String filename { get; set; }
-        public String type { get; set; }
-        public String date { get; set; }
-        public String name { get; set; }
+        //TODO - eventually going to add a time on here too for morning, evening night etc. and add ability to custom name files that don't fall under the category of the three file types supported.
+        public String filename;
+        public String type;
+        public String date;
+        public String name;
 
-        public PdfDocument file { get; set; }
+        public PdfDocument file;
 
+        /// <summary>
+        /// Constructor for the PDF file that has all properties of the file that are required to save to a file and name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="type">Type of the file that will be saved such as Group Note, Check in, Shift Log, etc.</param>
+        /// <param name="dateTime">Date that the scan was written</param>
+        /// <param name="fileinput">PDF File as a PDFDocument</param>
         public PDFModel(String name, String type, DateTime dateTime, PdfDocument fileinput)
         {
             this.name = name;
@@ -29,35 +34,6 @@ namespace SplitterLibrary
                 filename = name + " " + type + " " + date;
             }
             file = fileinput;
-        }
-
-        //TODO - organize code better, take some stuff out of the UI
-        //TODO - clean up the interface
-        //TODO - make standalone application
-        //TODO - make page numbers
-        //TODO - make starting screen with file selection section
-        //TODO - combine section
-        //TODO - Check section
-
-
-        public void writePDF()
-        {
-            int num = 2;
-            bool duplcate = false;
-            //check for duplicate and rename if needed
-            if (System.IO.File.Exists(GlobalConfig.outputPath + "\\" + filename + ".pdf"))
-            {
-                while(System.IO.File.Exists(GlobalConfig.outputPath+"\\"+filename + " " + num + ".pdf"))
-                {
-                    num++;
-                }
-                file.Save(GlobalConfig.outputPath + "\\" + filename + " " + num + ".pdf");
-            } else
-            {
-                file.Save(GlobalConfig.outputPath + "\\" + filename + ".pdf");
-            }
-
-            
         }
     }
 }

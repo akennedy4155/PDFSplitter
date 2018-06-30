@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SplitterLibrary;
+using SplitterLibrary.State.Splitter;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System.IO;
@@ -19,126 +20,52 @@ namespace SplitterUI
     {
         PdfDocument currentPage;
         PdfDocument fullPDF = PdfReader.Open(GlobalConfig.inputPath, PdfDocumentOpenMode.Import);
-        ParticipantListModel participantList = new ParticipantListModel(System.IO.Directory.GetCurrentDirectory() + "\\plist.txt");
-        Bridge bridge = new Bridge();
+        
         int currentPageNum = 0;
-        Mode currentMode = Mode.Start;
+
+        SplitterState state = new SplitterStart();
+
+        String currentSelectedType = "";
+        String currentSelectedTime = "";
 
         public PDFSplitter()
         {
             InitializeComponent();
             UpdateViewer();
-            participantListBox.DataSource = participantList.ParticipantList;
-            ChangeMode(currentMode);
+            participantListBox.DataSource = GlobalConfig.participantList.ParticipantList;
+            pdfViewer.src = GlobalConfig.tempPath + "\\current.pdf";
         }
 
-        private void actionButton_click(object sender, EventArgs e)
-        {
+        private void ActionButton_click(object sender, EventArgs e)
+        {  
             currentPageNum++;
-            //ROUTE PROCESSING, only one route to one controller
 
-            //SPEAK TO THE CONTROLLER, NEVER ACCESS THE DATABASE
-            //currentPage++;
             // Validate fields
             if (FormValidated())
             {
-                String type;
-                if (groupNoteButton.Checked)
-                {
-                    type = "Group Note";
-                } else if(checkInButton.Checked)
-                {
-                    type = "Check In";
-                } else
-                {
-                    type = "Shift Log";
-                    if (AMButton.Checked)
-                    {
-                        type += "AM";
-                    } else
-                    {
-                        type += "PM";
-                    }
-                }
-                PDFModel pdfm = new PDFModel(
-                    participantListBox.GetItemText(participantListBox.SelectedItem),
-                    type,
-                    dateSelectCalendar.SelectionStart,
-                    currentPage
-                    );
-
+                //write the pdf to the data connections
                 foreach (IDataConnection db in GlobalConfig.Connections)
                 {
-                    db.CreatePDF(pdfm);
+                    db.WritePDF(new PDFModel(
+                                    participantListBox.GetItemText(participantListBox.SelectedItem),
+                                    currentSelectedType + " " + currentSelectedTime,
+                                    dateSelectCalendar.SelectionStart,
+                                    currentPage
+                                    )
+                                );
                 }
 
-                //update the viewer and the current pdf
+                //if reached the end of the document then exit
+                //TODO - figure out what logic goes instead of just closing the document now that there's more states
                 if ((currentPageNum + 1) > fullPDF.Pages.Count)
-                {
                     Application.Exit();
-                }
                 else
-                {
                     UpdateViewer();
-                }
-            } else
-            {
+            }
+
+            //if form validation fails
+            else
                 MessageBox.Show("Invalid Form. Check one of the radio buttons for form type.");
-            }
-            
-        }
-
-        enum Mode { Split, Check, Start };
-
-        /// <summary>
-        /// Put form into start mode
-        /// </summary>
-        /// <param name="enabled"></param>
-        void ChangeMode (Mode mode)
-        {
-            //first disable all controls
-            foreach (Control c in this.Controls)
-            {
-                c.Enabled = false;
-            }
-            //then enter switch statement that allows the proper controls to show up for that mode
-            switch (mode)
-            {
-                case Mode.Split:
-                    break;
-                case Mode.Check:
-                    break;
-                case Mode.Start:
-                    break;
-            }
-
-        }
-
-        /// <summary>
-        /// Put the form into split mode, the main mode of the application.
-        /// </summary>
-        /// <param name="enabled"></param>
-        void EnableSplitMode(bool enabled)
-        {
-            foreach (Control c in this.Controls)
-            {
-                c.Enabled = enabled;
-            }
-
-
-        }
-
-        /// <summary>
-        /// Put the form into check mode
-        /// </summary>
-        /// <param name="enabled"></param>
-        void EnableCheckMode(bool enabled)
-        {
-            foreach (Control c in this.Controls)
-            {
-                c.Enabled = enabled;
-            }
-
             
         }
 
@@ -149,8 +76,8 @@ namespace SplitterUI
         {
             currentPage = new PdfDocument();
             currentPage.AddPage(fullPDF.Pages[currentPageNum]);
-            currentPage.Save(GlobalConfig.outputPath + "\\current.pdf");
-            pdfViewer.src = GlobalConfig.outputPath + "\\current.pdf";  
+            currentPage.Save(GlobalConfig.tempPath + "\\current.pdf");
+            pdfViewer.src = GlobalConfig.tempPath + "\\current.pdf";  
         }
 
         /// <summary>
@@ -181,42 +108,61 @@ namespace SplitterUI
         /// <param name="e"></param>
         private void PDFSplitter_FormClosing(object sender, FormClosingEventArgs e)
         {
-            File.Delete(GlobalConfig.outputPath + "\\current.pdf");
+            File.Delete(GlobalConfig.tempPath + "\\current.pdf");
         }
 
         /// <summary>
-        /// Get the state of the buttons and pack into a dictionary
-        /// </summary>
-        /// <returns>Dictionary with bool values for the state of buttons</returns>
-        private Dictionary<String, bool> PackageViewInfo()
-        {
-            Dictionary<String, bool> returnDict = new Dictionary<String, bool>();
-            returnDict.Add("Group Note", groupNoteButton.Checked);
-            returnDict.Add("Check In", checkInButton.Checked);
-            returnDict.Add("Shift Log", shiftLogButton.Checked);
-            returnDict.Add("AM", AMButton.Checked);
-            returnDict.Add("PM", PMButton.Checked);
-            return returnDict;
-        }
-
-        /// <summary>
-        /// Combine all of the documents in the input folder that aren't named example into example.pdf
+        /// Set the current selected type when a change is made in the UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void combineButton_Click(object sender, EventArgs e)
+        private void MainPanelButtonsChanged(object sender, EventArgs e)
         {
-            PdfDocument output = new PdfDocument();
-            foreach(String path in Directory.GetFiles(GlobalConfig.inputPath))
+            if(sender is RadioButton rb)
             {
-                //check if its not example
+                currentSelectedType = rb.Text;
+                if (rb.Text == "Check In" || rb.Text == "Group Note")
+                    timePanel.Enabled = false;
+                else
+                    timePanel.Enabled = true;
+            }
+                
+        }
 
+        /// <summary>
+        /// Set the current selected time when a change is made in the UI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TimePanelButtonCheckChanged(object sender, EventArgs e)
+        {
+            if (sender is RadioButton rb && rb.Checked)
+            {
+                Console.WriteLine("logged");
+                Console.WriteLine(rb.Text);
+                currentSelectedTime = rb.Text;
+            }
+                
+                
+        }
+
+        /// <summary>
+        /// Makes changes to the appearance and checked status of the buttons belonging to the panel that was disabled that sent this event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TimePanelEnabledChanged(object sender, EventArgs e)
+        {
+            if(sender is Panel p && !p.Enabled)
+            {
+                foreach (Control b in p.Controls)
+                {
+                    if (b is RadioButton rb)
+                        rb.Checked = false;
+                }
+                currentSelectedTime = null;
             }
         }
 
-        private void pageRightButton_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

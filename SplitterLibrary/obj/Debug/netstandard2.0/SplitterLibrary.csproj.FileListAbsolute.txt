@@ -7,3 +7,12 @@ c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0
 c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.AssemblyInfo.cs
 c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.dll
 c:\users\akenn\source\repos\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.pdb
+D:\Github\PDFSplitter\SplitterLibrary\bin\Debug\netstandard2.0\SplitterLibrary.deps.json
+D:\Github\PDFSplitter\SplitterLibrary\bin\Debug\netstandard2.0\SplitterLibrary.dll
+D:\Github\PDFSplitter\SplitterLibrary\bin\Debug\netstandard2.0\SplitterLibrary.pdb
+D:\Github\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.csprojAssemblyReference.cache
+D:\Github\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.csproj.CoreCompileInputs.cache
+D:\Github\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.AssemblyInfoInputs.cache
+D:\Github\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.AssemblyInfo.cs
+D:\Github\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.dll
+D:\Github\PDFSplitter\SplitterLibrary\obj\Debug\netstandard2.0\SplitterLibrary.pdb

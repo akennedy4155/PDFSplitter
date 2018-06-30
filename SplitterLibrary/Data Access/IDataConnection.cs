@@ -9,6 +9,6 @@ namespace SplitterLibrary
     /// </summary>
     public interface IDataConnection
     {
-        bool CreatePDF(PDFModel model);
+        bool WritePDF(PDFModel model);
     }
 }

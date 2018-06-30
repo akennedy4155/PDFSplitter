@@ -240,11 +240,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\akenn\\source\\repos\\PDFSplitter\\SplitterLibrary\\SplitterLibrary.csproj",
+      "projectUniqueName": "D:\\Github\\PDFSplitter\\SplitterLibrary\\SplitterLibrary.csproj",
       "projectName": "SplitterLibrary",
-      "projectPath": "C:\\Users\\akenn\\source\\repos\\PDFSplitter\\SplitterLibrary\\SplitterLibrary.csproj",
+      "projectPath": "D:\\Github\\PDFSplitter\\SplitterLibrary\\SplitterLibrary.csproj",
       "packagesPath": "C:\\Users\\akenn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\akenn\\source\\repos\\PDFSplitter\\SplitterLibrary\\obj\\",
+      "outputPath": "D:\\Github\\PDFSplitter\\SplitterLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
